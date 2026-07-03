@@ -256,14 +256,15 @@
     <script>
         let rates = {};
         
-        // Google Apps Script Web App URL
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz-GUeRwLIcrzGfo_8PY840ZqTWuiiChJP_PgJ6nDMaBJYLRHwozeCpEsOOa3dQoyx9XQ
-/usercontent';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz-GUeRwLIcrzGfo_8PY840ZqTWuiiChJP_PgJ6nDMaBJYLRHwozeCpEsOOa3dQoyx9XQ/exec';
 
         async function fetchRates() {
             try {
+                console.log('환율을 가져오고 있습니다...');
                 const response = await fetch(WEB_APP_URL);
                 const data = await response.json();
+                
+                console.log('받은 환율 데이터:', data);
                 
                 rates = {
                     'CNY': { rate: data.CNY, name: '중국 위안(CNH)' },
@@ -276,12 +277,9 @@
                     'THB': { rate: data.THB, name: '태국 바트(THB)' }
                 };
                 
-                console.log('환율이 업데이트되었습니다:', rates);
-                console.log('업데이트 시간:', data.timestamp);
                 calculate();
             } catch (error) {
                 console.error('환율 로드 실패:', error);
-                // 실패 시 기본값
                 rates = {
                     'CNY': { rate: 0.000218, name: '중국 위안(CNH)' },
                     'USD': { rate: 0.000653, name: '미국 달러(USD)' },
@@ -321,7 +319,6 @@
 
         window.addEventListener('load', fetchRates);
         
-        // 5분마다 환율 자동 갱신
         setInterval(fetchRates, 5 * 60 * 1000);
     </script>
 </body>
